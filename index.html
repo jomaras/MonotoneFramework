@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <title>Principles of Program analysis - assignment</title>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="styles/built-editor.css"/>
+    <link rel="stylesheet" type="text/css" href="styles/style.css"/>
+    <link rel="stylesheet" href="styles/foundation.min.css">
+    <style>
+        textarea {
+            white-space: pre;
+            overflow: scroll;
+            font-size: 10pt;
+            font-family: 'Droid Sans Mono', Menlo, Consolas, 'Courier New', Courier, monospace, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navigation bar -->
+<div class="row">
+    <div class="twelve columns">
+        <nav class="top-bar">
+            <ul>
+                <li class="name">
+                    <h1><a href="index.html">Program analysis mini project 2.3</a></h1>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Main content -->
+<div class="row">
+    <div class="twelve columns">
+        <label>Source code:</label>
+        <pre id="editor" spellcheck="false" style="height: 200px"></pre>
+        <div id="info" class="alert-box secondary">Ready.</div>
+        <div id="flowContainer" class="alert-box secondary">()</div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="twelve columns">
+        <label>Flow graph:</label>
+        <svg height="0px">
+            <defs>
+                <marker id="arrowPointer" viewBox="0 0 10 10" refX="1" refY="5" markerUnits="strokeWidth" orient="auto" markerWidth="4" markerHeight="3">
+                    <polyline points="0,0 10,5 0,10 1,5" fill="gray" />
+                </marker>
+            </defs>
+        </svg>
+        <svg height="350px" id="graphContainer">
+
+        </svg>
+    </div>
+</div>
+
+<div class="row">
+    <div class="twelve columns">
+        <h4>JsWhile language:</h4>
+        <table width="400px">
+            <thead>
+                <tr>
+                    <th>While</th>
+                    <th>JsWhile</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+            <tr>
+                <td>x := a</td>
+                <td>x = a</td>
+            </tr>
+            <tr>
+                <td>skip</td>
+                <td>;</td>
+            </tr>
+            <tr>
+                <td>if b then S1 else S2</td>
+                <td>if (b) S1 else S2</td>
+            </tr>
+            <tr>
+                <td>while b do S</td>
+                <td>while(b) S </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="row copyright">
+    <div class="six columns">
+        <p>WHILE-like analysis implemented by Josip Maras</p>
+    </div>
+    <div class="six columns">
+        <ul class="link-list right">
+            <li><a href="https://github.com/jomaras">GitHub</a></li>
+        </ul>
+    </div>
+</div>
+
+<script src="scripts/esprima.js"></script>
+<script src="scripts/built-editor.min.js"></script>
+<script src="scripts/customeditor.js"></script>
+<script src="scripts/ASTHelper.js"></script>
+<script src="scripts/GraphHelper.js"></script>
+<script src="scripts/main.js"></script>
+</body>
+</html>
