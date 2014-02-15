@@ -67,3 +67,18 @@ div#info {
     margin: -1px;
     border-radius: 4px;
 }
+
+.derivedInfoContainer
+{
+
+}
+
+.analysisResultsTable td:first-child
+{
+    width: 15px;
+}
+
+.analysisResultsTable td
+{
+    width: 120px;
+}

@@ -50,6 +50,23 @@ var ASTHelper =
         return this._getFlowFromBlockStatement(program);
     },
 
+    getUniqueIdentifiers: function(program)
+    {
+        var identifiersMap = {};
+
+        ASTHelper.traverseModel(program, function(element)
+        {
+            if(ASTHelper.isIdentifier(element))
+            {
+                if(identifiersMap[element.name] == null) { identifiersMap[element.name] = []; }
+
+                identifiersMap[element.name].push(element);
+            }
+        });
+
+        return identifiersMap;
+    },
+
     getLabelStatementMapping: function(program)
     {
         var labelStatementMapping = {};
@@ -63,6 +80,83 @@ var ASTHelper =
         });
 
         return labelStatementMapping;
+    },
+
+    getExpressionsCodeAsSetString: function(expressions)
+    {
+        var string = "{";
+        expressions = expressions || [];
+
+        for(var i = 0; i < expressions.length; i++)
+        {
+            if(i != 0) { string += ", "; }
+
+            string += ASTHelper.getCode(expressions[i]);
+        }
+
+        string += "}";
+
+        return string
+    },
+
+    containsIdentifierWithName: function(expression, identifierName)
+    {
+        var found = false;
+        this.traverseModel(expression, function(element)
+        {
+            if(ASTHelper.isIdentifier(element) && element.name == identifierName)
+            {
+                found = true;
+            }
+        });
+
+        return found;
+    },
+
+    getAssignedIdentifierName: function(statement)
+    {
+        if(this.isExpressionStatement(statement)) { statement = statement.expression; }
+        if(!this.isAssignmentExpression(statement)) { return null; }
+
+        return statement.left.name;
+    },
+
+    getAssignmentExpressionStatements: function(program)
+    {
+        var assignmentExpressions = [];
+
+        ASTHelper.traverseModel(program, function(element)
+        {
+            if(ASTHelper.isAssignmentExpressionStatement(element))
+            {
+                assignmentExpressions.push(element);
+            }
+        });
+
+        return assignmentExpressions;
+    },
+
+    getArithmeticExpressions: function(program)
+    {
+        var expressions = [];
+        var codeExpressions = [];
+
+        ASTHelper.traverseModel(program, function(element)
+        {
+            if(ASTHelper.isArithmeticExpression(element))
+            {
+                //this with code is to avoid duplicate expression
+                var code = ASTHelper.getCode(element);
+
+                if(codeExpressions.indexOf(code) == -1)
+                {
+                    expressions.push(element);
+                    codeExpressions.push(code);
+                }
+            }
+        });
+
+        return expressions;
     },
 
     getParentBlockStatements: function(element)
@@ -244,7 +338,6 @@ var ASTHelper =
         return [element];
     },
 
-
     createParentChildRelationship: function (astElement)
     {
         ASTHelper.traverseModel(astElement, function(element, propertyName, parent)
@@ -358,24 +451,36 @@ var ASTHelper =
 
             var propValue = astModel[propName];
 
-            if(isArray(propValue))
+            if(ASTHelper._isArray(propValue))
             {
                 for(var i = 0; i < propValue.length; i++)
                 {
                     var item = propValue[i];
-                    if(isObject(item))
+                    if(ASTHelper._isObject(item))
                     {
                         traversalFunction && traversalFunction(item, propName, astModel);
                         ASTHelper.traverseModel(item, traversalFunction);
                     }
                 }
             }
-            else if(isObject(propValue))
+            else if(ASTHelper._isObject(propValue))
             {
                 traversalFunction && traversalFunction(propValue, propName, astModel);
                 ASTHelper.traverseModel(propValue, traversalFunction);
             }
         }
+    },
+
+    isAssignmentExpressionStatement: function(element)
+    {
+        return this.isExpressionStatement(element)
+            && this.isAssignmentExpression(element.expression);
+    },
+
+    isConditionalStatement: function(element)
+    {
+        return this.isIfStatement(element)
+            || this.isWhileStatement(element);
     },
 
     isStatement: function(element)
@@ -432,6 +537,14 @@ var ASTHelper =
     isIfStatement: function(element)
     {
         return this._isStatementOfType(element, this.CONST.IfStatement);
+    },
+    isArithmeticExpression: function(element)
+    {
+        if(!ASTHelper.isBinaryExpression(element)) { return false; }
+
+        return element.operator == "+" || element.operator == "-"
+            || element.operator == "/" || element.operator == "%"
+            || element.operator == "*";
     },
 
     _isStatementOfType: function(element, type)
@@ -527,6 +640,17 @@ var ASTHelper =
     _generateCodeFromWhileStatement: function(element)
     {
         return "while (" + this.getCode(element.test) + ")";
+    },
+
+    _isObject: function(potentialObject)
+    {
+        return potentialObject != null && 'object' == typeof potentialObject;
+    },
+
+    _isArray: function(potentialArray)
+    {
+        return potentialArray != null &&
+            (typeof potentialArray) == "array" || potentialArray instanceof Array || (Array.isArray && Array.isArray(potentialArray));
     }
 };
 

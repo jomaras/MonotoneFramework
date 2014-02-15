@@ -33,19 +33,48 @@
     </div>
 </div>
 
-<!-- Main content -->
 <div class="row">
     <div class="twelve columns">
+        <h5>Book examples</h5>
+        <div id="examplesContainer"></div>
+        <br/>
+    </div>
+</div>
+
+<!-- INPUT CONTAINERS -->
+<div class="row">
+    <div class="six columns">
         <label>Source code:</label>
-        <pre id="editor" spellcheck="false" style="height: 200px"></pre>
+        <pre id="editor" spellcheck="false" style="height: 320px"></pre>
         <div id="info" class="alert-box secondary">Ready.</div>
-        <div id="flowContainer" class="alert-box secondary">()</div>
+    </div>
+    <div class="six columns">
+        <label>Derived Information:</label>
+        <table style="width:100%; height: 100%">
+            <tr>
+                <td class="labelContainer"><label>Labels:</label></td>
+                <td id="labelsContainer" class="derivedInfoContainer"></td>
+            </tr>
+            <tr>
+                <td class="labelContainer"><label>Variables:</label></td>
+                <td id="variablesContainer" class="derivedInfoContainer"></td>
+            </tr>
+            <tr>
+                <td class="labelContainer"><label>Flow:</label></td>
+                <td id="flowContainer" class="derivedInfoContainer"></td>
+            </tr>
+            <tr>
+                <td class="labelContainer"><label>Expressions:</label></td>
+                <td id="expressionsContainer" class="derivedInfoContainer"></td>
+            </tr>
+        </table>
     </div>
 </div>
 
 <div class="row">
-    <div class="twelve columns">
+    <div class="six columns">
         <label>Flow graph:</label>
+        <svg height="350px" id="graphContainer"></svg>
         <svg height="0px">
             <defs>
                 <marker id="arrowPointer" viewBox="0 0 10 10" refX="1" refY="5" markerUnits="strokeWidth" orient="auto" markerWidth="4" markerHeight="3">
@@ -53,16 +82,89 @@
                 </marker>
             </defs>
         </svg>
-        <svg height="350px" id="graphContainer">
+    </div>
+    <div class="six columns">
+        <dl class="tabs">
+            <dd id="availableExpressionsHeader" class="active"><a href="#">AE</a></dd>
+            <dd id="reachingDefinitionsHeader"><a href="#">RD</a></dd>
+            <dd id="veryBusyExpressionsHeader"><a href="#">VB</a></dd>
+            <dd id="liveVariablesHeader"><a href="#">LV</a></dd>
+        </dl>
+        <ul class="tabs-content">
+            <li class="active" id="availableExpressionsTab">
+                <table class="analysisResultsTable">
+                    <thead>
+                    <tr>
+                        <th>l</th>
+                        <th>kill(l)</th>
+                        <th>gen(l)</th>
+                        <th>entry(l)</th>
+                        <th>exit(l)</th>
+                    </tr>
+                    </thead>
+                    <tbody id="availableExpressionTableBody">
 
-        </svg>
+                    </tbody>
+                </table>
+            </li>
+            <li></li>
+            <li id="reachingDefinitionsTab" style="display:none;">
+                <table class="analysisResultsTable">
+                    <thead>
+                    <tr>
+                        <th>l</th>
+                        <th>kill(l)</th>
+                        <th>gen(l)</th>
+                        <th>entry(l)</th>
+                        <th>exit(l)</th>
+                    </tr>
+                    </thead>
+                    <tbody id="reachingDefinitionsTableBody">
+
+                    </tbody>
+                </table>
+            </li>
+            <li id="veryBusyExpressionsTab" style="display:none;">
+                <table class="analysisResultsTable">
+                    <thead>
+                    <tr>
+                        <th>l</th>
+                        <th>kill(l)</th>
+                        <th>gen(l)</th>
+                        <th>entry(l)</th>
+                        <th>exit(l)</th>
+                    </tr>
+                    </thead>
+                    <tbody id="veryBusyExpressionsTableBody">
+
+                    </tbody>
+                </table>
+            </li>
+            <li id="liveVariablesTab" style="display:none;">
+                <table class="analysisResultsTable">
+                    <thead>
+                    <tr>
+                        <th>l</th>
+                        <th>kill(l)</th>
+                        <th>gen(l)</th>
+                        <th>entry(l)</th>
+                        <th>exit(l)</th>
+                    </tr>
+                    </thead>
+                    <tbody id="liveVariablesTableBody">
+
+                    </tbody>
+                </table>
+            </li>
+            <li></li>
+        </ul>
     </div>
 </div>
 
 <div class="row">
-    <div class="twelve columns">
+    <div class="six columns">
         <h4>JsWhile language:</h4>
-        <table width="400px">
+        <table width="100%">
             <thead>
                 <tr>
                     <th>While</th>
@@ -99,16 +201,18 @@
     </div>
     <div class="six columns">
         <ul class="link-list right">
-            <li><a href="https://github.com/jomaras">GitHub</a></li>
+            <li><a href="https://github.com/jomaras/MonotoneFramework">GitHub</a></li>
         </ul>
     </div>
 </div>
 
-<script src="scripts/esprima.js"></script>
-<script src="scripts/built-editor.min.js"></script>
-<script src="scripts/customeditor.js"></script>
-<script src="scripts/ASTHelper.js"></script>
-<script src="scripts/GraphHelper.js"></script>
-<script src="scripts/main.js"></script>
+<script src="scripts/esprima.js" type="application/javascript"></script>
+<script src="scripts/built-editor.min.js" type="application/javascript"></script>
+<script src="scripts/customeditor.js" type="application/javascript"></script>
+<script src="scripts/ASTHelper.js" type="application/javascript"></script>
+<script src="scripts/GraphHelper.js" type="application/javascript"></script>
+<script src="scripts/KillDerivator.js" type="application/javascript"></script>
+<script src="scripts/GenerateDerivator.js" type="application/javascript"></script>
+<script src="scripts/main.js" type="application/javascript"></script>
 </body>
 </html>
