@@ -83,6 +83,7 @@
             </defs>
         </svg>
     </div>
+
     <div class="six columns">
         <dl class="tabs">
             <dd id="availableExpressionsHeader" class="active"><a href="#">AE</a></dd>
@@ -98,8 +99,6 @@
                         <th>l</th>
                         <th>kill(l)</th>
                         <th>gen(l)</th>
-                        <th>entry(l)</th>
-                        <th>exit(l)</th>
                     </tr>
                     </thead>
                     <tbody id="availableExpressionTableBody">
@@ -115,8 +114,6 @@
                         <th>l</th>
                         <th>kill(l)</th>
                         <th>gen(l)</th>
-                        <th>entry(l)</th>
-                        <th>exit(l)</th>
                     </tr>
                     </thead>
                     <tbody id="reachingDefinitionsTableBody">
@@ -131,8 +128,6 @@
                         <th>l</th>
                         <th>kill(l)</th>
                         <th>gen(l)</th>
-                        <th>entry(l)</th>
-                        <th>exit(l)</th>
                     </tr>
                     </thead>
                     <tbody id="veryBusyExpressionsTableBody">
@@ -147,8 +142,6 @@
                         <th>l</th>
                         <th>kill(l)</th>
                         <th>gen(l)</th>
-                        <th>entry(l)</th>
-                        <th>exit(l)</th>
                     </tr>
                     </thead>
                     <tbody id="liveVariablesTableBody">
@@ -158,6 +151,25 @@
             </li>
             <li></li>
         </ul>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class = "twelve columns">
+        <input type="button" value="Start Worklist algorithm" id="startWorklistAlgorithmButton"/>
+        <div id="workListAlgorithmContainer" style="display:none; ">
+            <label>Worklist algorithm execution: </label><br/>
+            <table>
+                <thead>
+                    <tr id="monotoneFrameworkAnalysisResultsHeaderRow">
+                    </tr>
+                </thead>
+                <tbody id="monotoneFrameworkAnalysisResultsBody">
+
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -213,6 +225,8 @@
 <script src="scripts/GraphHelper.js" type="application/javascript"></script>
 <script src="scripts/KillDerivator.js" type="application/javascript"></script>
 <script src="scripts/GenerateDerivator.js" type="application/javascript"></script>
+<script src="scripts/MonotoneFramework.js" type="application/javascript"></script>
+<script src="scripts/WorklistSolver.js" type="application/javascript"></script>
 <script src="scripts/main.js" type="application/javascript"></script>
 </body>
 </html>

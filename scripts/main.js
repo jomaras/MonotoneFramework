@@ -16,6 +16,18 @@ window.onload = function ()
     var veryBusyExpressionsTab = document.getElementById("veryBusyExpressionsTab");
     var liveVariablesTab = document.getElementById("liveVariablesTab");
 
+    var monotoneFrameworkAnalysisResultsHeaderRow = document.getElementById("monotoneFrameworkAnalysisResultsHeaderRow");
+    var monotoneFrameworkAnalysisResultsBody = document.getElementById("monotoneFrameworkAnalysisResultsBody");
+
+    var startWorklistAlgorithmButton = document.getElementById("startWorklistAlgorithmButton");
+    var workListAlgorithmContainer = document.getElementById("workListAlgorithmContainer");
+
+    startWorklistAlgorithmButton.onclick = function()
+    {
+        startWorklistAlgorithm();
+        workListAlgorithmContainer.style.display = "";
+    };
+
     var examplesContainer = document.getElementById("examplesContainer");
 
     var currentProgram = null;
@@ -23,14 +35,17 @@ window.onload = function ()
 
     var examples =
     [
-        "x = a + b;\ny = a * b;\n\nwhile (y > a + b)\n{\n\ta = a + 1;\n\tx = a + b;\n}\n"
+        "x = a + b;\ny = a * b;\n\nwhile (y > a + b)\n{\n\ta = a + 1;\n\tx = a + b;\n}\n",
+        "x = 5;\ny = 1;\nwhile (x > 1)\n{\n\ty = x * y;\n\tx = x - 1;\n}\n",
+        "if(a > b)\n{\n\tx = b - a;\n\ty = a - b;\n}\nelse\n{\n\ty = b - a;\n\tx = a - b;\n}",
+        "x = 2;\ny = 4;\nx = 1;\nif(y > x)\n\tz = y\nelse\n\tz = y * y;\nx = z;"
     ];
 
     for(var i = 0; i < examples.length; i++)
     {
         var link = document.createElement("a");
         link.href = "#";
-        link.textContent = "Example " +  (i + 1) + ": " + examples[i];
+        link.textContent = "#" +  (i + 1) + ": " + examples[i];
 
         link.onclick = function()
         {
@@ -41,6 +56,8 @@ window.onload = function ()
         link.exampleIndex = i;
 
         examplesContainer.appendChild(link);
+        examplesContainer.appendChild(document.createElement("br"));
+        examplesContainer.appendChild(document.createElement("br"));
     }
 
     var availableExpressionTableBody = document.getElementById("availableExpressionTableBody");
@@ -72,7 +89,7 @@ window.onload = function ()
 
         selectedAnalysisType = analysisType.availableExpressions;
 
-        performAnalysis(currentProgram, currentProgramInfo);
+        computeKilledGenerated(currentProgram, currentProgramInfo);
 
         return false;
     };
@@ -91,7 +108,7 @@ window.onload = function ()
 
         selectedAnalysisType = analysisType.reachingDefinitions;
 
-        performAnalysis(currentProgram, currentProgramInfo);
+        computeKilledGenerated(currentProgram, currentProgramInfo);
 
         return false;
     };
@@ -110,7 +127,7 @@ window.onload = function ()
 
         selectedAnalysisType = analysisType.veryBusyExpressions;
 
-        performAnalysis(currentProgram, currentProgramInfo);
+        computeKilledGenerated(currentProgram, currentProgramInfo);
 
         return false;
     };
@@ -129,7 +146,7 @@ window.onload = function ()
 
         selectedAnalysisType = analysisType.liveVariables;
 
-        performAnalysis(currentProgram, currentProgramInfo);
+        computeKilledGenerated(currentProgram, currentProgramInfo);
 
         return false;
     };
@@ -163,7 +180,7 @@ window.onload = function ()
 
                 buildFlowGraph(statements, programInfo.flow, programInfo.labelStatementMapping);
 
-                performAnalysis(program, programInfo);
+                computeKilledGenerated(program, programInfo);
 
                 infoElement.innerHTML = 'No error';
             }
@@ -187,7 +204,7 @@ window.onload = function ()
             labels: [],
             labelStatementMapping: labelStatementMapping,
             flow: ASTHelper.getFlow(program),
-            variables: ASTHelper.getUniqueIdentifiers(program),
+            variables: ASTHelper.getUniqueIdentifiersMap(program),
             arithmeticExpressions: ASTHelper.getArithmeticExpressions(program)
         };
 
@@ -281,53 +298,87 @@ window.onload = function ()
         GraphHelper.layoutGraph(graphNodes, graphContainer, labelMapping, flow);
     }
 
-    function performAnalysis(program, programInfo)
+    function computeKilledGenerated(program, programInfo)
     {
         if(program == null || programInfo == null) { return; }
 
         switch (selectedAnalysisType)
         {
             case analysisType.availableExpressions:
-                performAvailableExpressionsAnalysis(program, programInfo);
+                computeKilledGeneratedAvailableExpressionsAnalysis(program, programInfo);
                 break;
             case analysisType.reachingDefinitions:
-                performReachingDefinitionsAnalysis(program, programInfo);
+                computeKilledGeneratedReachingDefinitionsAnalysis(program, programInfo);
                 break;
+            case analysisType.veryBusyExpressions:
+                computeKilledGeneratedVeryBusyExpressionsAnalysis(program, programInfo);
+            case analysisType.liveVariables:
+                computeKilledGeneratedLiveVariablesAnalysis(program, programInfo);
             default:
         }
     }
 
-    function performAvailableExpressionsAnalysis(program, programInfo)
+    function computeKilledGeneratedAvailableExpressionsAnalysis(program, programInfo)
     {
         var labelMapping = programInfo.labelStatementMapping;
-        var availableExpressionsKillDerivator = KillDerivator.instantiateAvailableExpressionsAnalysis();
-        var availableExpressionsGenerateDerivator = GenerateDerivator.instantiateAvailableExpressionsAnalysis();
+        var killDerivator = KillDerivator.instantiateAvailableExpressionsAnalysis();
+        var generateDerivator = GenerateDerivator.instantiateAvailableExpressionsAnalysis();
 
         for(var label in labelMapping)
         {
-            labelMapping[label].killed = availableExpressionsKillDerivator.getKilled(labelMapping[label].statement, program);
-            labelMapping[label].generated = availableExpressionsGenerateDerivator.getGenerated(labelMapping[label].statement, program);
+            labelMapping[label].killed = killDerivator.getKilled(labelMapping[label].statement, program);
+            labelMapping[label].generated = generateDerivator.getGenerated(labelMapping[label].statement, program);
         }
 
-        notifyAnalysisResultsExpression(availableExpressionTableBody, programInfo);
+        notifyKilledGeneratedAnalysisResultsExpression(availableExpressionTableBody, programInfo);
     }
 
-    function performReachingDefinitionsAnalysis(program, programInfo)
+    function computeKilledGeneratedReachingDefinitionsAnalysis(program, programInfo)
     {
         var labelMapping = programInfo.labelStatementMapping;
-        var reachingDefinitionsKillDerivator = KillDerivator.instantiateReachingDefinitionsAnalysis();
-        var reachingDefinitionsGenerateDerivator = GenerateDerivator.instantiateReachingDefinitionsAnalysis();
+        var killDerivator = KillDerivator.instantiateReachingDefinitionsAnalysis();
+        var generateDerivator = GenerateDerivator.instantiateReachingDefinitionsAnalysis();
 
         for(var label in labelMapping)
         {
-            labelMapping[label].killed = reachingDefinitionsKillDerivator.getKilled(labelMapping[label].statement, program);
-            labelMapping[label].generated = reachingDefinitionsGenerateDerivator.getGenerated(labelMapping[label].statement, program);
+            labelMapping[label].killed = killDerivator.getKilled(labelMapping[label].statement, program);
+            labelMapping[label].generated = generateDerivator.getGenerated(labelMapping[label].statement, program);
         }
 
-        notifyAnalysisResultsVariablesAndLabels(reachingDefinitionsTableBody, programInfo);
+        notifyKilledGeneratedAnalysisResultsVariablesAndLabels(reachingDefinitionsTableBody, programInfo);
     }
 
-    function notifyAnalysisResultsExpression(tableBody, programInfo)
+    function computeKilledGeneratedVeryBusyExpressionsAnalysis(program, programInfo)
+    {
+        var labelMapping = programInfo.labelStatementMapping;
+        var killDerivator = KillDerivator.instantiateVeryBusyExpressionsAnalysis();
+        var generatorDerivator = GenerateDerivator.instantiateVeryBusyExpressionsAnalysis();
+
+        for(var label in labelMapping)
+        {
+            labelMapping[label].killed = killDerivator.getKilled(labelMapping[label].statement, program);
+            labelMapping[label].generated = generatorDerivator.getGenerated(labelMapping[label].statement, program);
+        }
+
+        notifyKilledGeneratedAnalysisResultsExpression(veryBusyExpressionsTableBody, programInfo);
+    }
+
+    function computeKilledGeneratedLiveVariablesAnalysis(program, programInfo)
+    {
+        var labelMapping = programInfo.labelStatementMapping;
+        var killDerivator = KillDerivator.instantiateLiveVariablesAnalysis();
+        var generatorDerivator = GenerateDerivator.instantiateLiveVariablesAnalysis();
+
+        for(var label in labelMapping)
+        {
+            labelMapping[label].killed = killDerivator.getKilled(labelMapping[label].statement, program);
+            labelMapping[label].generated = generatorDerivator.getGenerated(labelMapping[label].statement, program);
+        }
+
+        notifyKilledGeneratedAnalysisResultsVariables(liveVariablesTableBody, programInfo);
+    }
+
+    function notifyKilledGeneratedAnalysisResultsExpression(tableBody, programInfo)
     {
         tableBody.innerHTML = "";
 
@@ -345,7 +396,7 @@ window.onload = function ()
         }
     }
 
-    function notifyAnalysisResultsVariablesAndLabels(tableBody, programInfo)
+    function notifyKilledGeneratedAnalysisResultsVariablesAndLabels(tableBody, programInfo)
     {
         tableBody.innerHTML = "";
 
@@ -358,6 +409,24 @@ window.onload = function ()
             row.appendChild(createCell(label));
             row.appendChild(createCell(getVariablesAndLabelsString(labelMapping[label].killed)));
             row.appendChild(createCell(getVariablesAndLabelsString(labelMapping[label].generated)));
+
+            tableBody.appendChild(row);
+        }
+    }
+
+    function notifyKilledGeneratedAnalysisResultsVariables(tableBody, programInfo)
+    {
+        tableBody.innerHTML = "";
+
+        var labelMapping = programInfo.labelStatementMapping;
+
+        for(var label in labelMapping)
+        {
+            var row = document.createElement("tr");
+
+            row.appendChild(createCell(label));
+            row.appendChild(createCell("{" + labelMapping[label].killed.join(", ") + "}"));
+            row.appendChild(createCell("{" + labelMapping[label].generated.join(",") + "}"));
 
             tableBody.appendChild(row);
         }
@@ -384,6 +453,14 @@ window.onload = function ()
         cell.textContent = text;
 
         return cell;
+    }
+
+    function startWorklistAlgorithm()
+    {
+        if(currentProgram != null && currentProgramInfo != null)
+        {
+            WorklistSolver.solveDataFlowEquations(MonotoneFramework.instantiateAvailableExpressionsAnalysis(currentProgram, currentProgramInfo));
+        }
     }
 
     try

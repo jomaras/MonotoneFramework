@@ -50,9 +50,57 @@ var ASTHelper =
         return this._getFlowFromBlockStatement(program);
     },
 
-    getUniqueIdentifiers: function(program)
+    getReverseFlow: function(program)
+    {
+        var flow = this.getFlow(program);
+
+        var reverseFlow = [];
+
+        for(var i = flow.length - 1; i >= 0; i--)
+        {
+            reverseFlow.push({first: flow[i].second, second: flow[i].first});
+        }
+
+        return reverseFlow;
+    },
+
+    getInitialLabels: function(program)
+    {
+        var firstStatement = program.body[0];
+
+        if(firstStatement == null) { return []; }
+
+        return [firstStatement.label]
+    },
+
+    getFinalLabels: function(program)
+    {
+        var lastStatements = this._getLastStatements(program.body)
+
+        if(lastStatements == null) { return []; }
+
+        var labels = [];
+
+        for(var i = 0; i < lastStatements.length; i++)
+        {
+            labels.push(lastStatements[i].label)
+        }
+
+        return labels;
+    },
+
+    getUniqueIdentifiersMap: function(program)
     {
         var identifiersMap = {};
+
+        if(this.isIdentifier(program))
+        {
+            if(identifiersMap[program.name] == null) { identifiersMap[program.name] = []; }
+
+            identifiersMap[program.name].push(program);
+
+            return identifiersMap;
+        }
 
         ASTHelper.traverseModel(program, function(element)
         {
@@ -159,6 +207,24 @@ var ASTHelper =
         return expressions;
     },
 
+    getArithmeticExpressionsAsCode: function(program)
+    {
+        var arithmeticExpressions = this.getArithmeticExpressions(program);
+        var codeExpressions = [];
+
+        for(var i = 0; i < arithmeticExpressions.length; i++)
+        {
+            var code = this.getCode(arithmeticExpressions[i]);
+
+            if(codeExpressions.indexOf(code) == -1)
+            {
+                codeExpressions.push(code);
+            }
+        }
+
+        return codeExpressions;
+    },
+
     getParentBlockStatements: function(element)
     {
         var parentBlockStatements = [];
@@ -197,6 +263,8 @@ var ASTHelper =
     getPreviousStatements: function(statement)
     {
         var parent = statement.parent;
+
+        if(this.isConditionalStatement(parent) && !this.isBlockStatement(parent.body)) { return []; }
 
         var statements = parent.children;
 
@@ -300,7 +368,17 @@ var ASTHelper =
         var flow = [];
 
         flow.push({first: ifStatement, second: this._getFirstStatement(ifStatement.consequent)});
+
+        if(this.isBlockStatement(ifStatement.consequent))
+        {
+            flow = flow.concat(this._getFlowFromBlockStatement(ifStatement.consequent));
+        }
+
         flow.push({first: ifStatement, second: this._getFirstStatement(ifStatement.alternate)});
+        if(this.isBlockStatement(ifStatement.alternate))
+        {
+            flow = flow.concat(this._getFlowFromBlockStatement(ifStatement.alternate));
+        }
 
         if(nextStatement != null)
         {

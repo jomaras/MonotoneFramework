@@ -7,6 +7,7 @@ GenerateDerivator.prototype.getGenerated = function(statement, program)
     else if(ASTHelper.isConditionalStatement(statement)) { return this._getGeneratedFromConditionalStatement(statement, program); }
 };
 
+/*AVAILABLE EXPRESSIONS*/
 GenerateDerivator.prototype._availableExpressionsGetGeneratedFromAssignmentExpression = function(statement, program)
 {
     var allArithmeticExpressions = ASTHelper.getArithmeticExpressions(statement);
@@ -26,34 +27,74 @@ GenerateDerivator.prototype._availableExpressionsGetGeneratedFromAssignmentExpre
 
     return generatedArithmeticExpressions;
 };
-
-GenerateDerivator.prototype._availableExpressionsGetGeneratedFromEmptyStatement = function(statement, program)
-{
-    return [];
-}
-
+GenerateDerivator.prototype._availableExpressionsGetGeneratedFromEmptyStatement = function(statement, program) { return []; }
 GenerateDerivator.prototype._availableExpressionsGetGeneratedFromConditionalStatement = function(statement, program)
 {
     return ASTHelper.getArithmeticExpressions(statement.test);
 }
 
+
+/*REACHING DEFINITIONS*/
 GenerateDerivator.prototype._reachingDefinitionsGetGeneratedFromAssignmentExpression = function(statement, program)
 {
     if(!ASTHelper.isAssignmentExpressionStatement(statement)) { return []; }
 
     return [{variable: ASTHelper.getAssignedIdentifierName(statement), label: statement.label}];
 };
+GenerateDerivator.prototype._reachingDefinitionsGetGeneratedFromEmptyStatement = function(statement, program) { return []; }
+GenerateDerivator.prototype._reachingDefinitionsGetGeneratedFromConditionalStatement = function(statement, program) { return []; }
 
-GenerateDerivator.prototype._reachingDefinitionsGetGeneratedFromEmptyStatement = function(statement, program)
+
+/*VERY BUSY EXPRESSIONS*/
+GenerateDerivator.prototype._veryBusyExpressionsGetGeneratedFromAssignmentExpression = function(statement, program)
 {
-    return [];
+    return ASTHelper.getArithmeticExpressions(statement);
+};
+GenerateDerivator.prototype._veryBusyExpressionsGetGeneratedFromEmptyStatement = function(statement, program) { return []; }
+GenerateDerivator.prototype._veryBusyExpressionsGetGeneratedFromConditionalStatement = function(statement, program)
+{
+    return ASTHelper.getArithmeticExpressions(statement.test);
 }
 
-GenerateDerivator.prototype._reachingDefinitionsGetGeneratedFromConditionalStatement = function(statement, program)
+
+/*LIVE VARIABLES*/
+GenerateDerivator.prototype._liveVariablesGetGeneratedFromAssignmentExpression = function(statement, program)
 {
-    return [];
+    if(ASTHelper.isExpressionStatement(statement)) { statement = statement.expression; }
+
+    var identifiersMap = ASTHelper.getUniqueIdentifiersMap(statement.right);
+
+    var identifiers = [];
+
+    for(var identifier in identifiersMap)
+    {
+        if(identifiersMap.hasOwnProperty(identifier))
+        {
+            identifiers.push(identifier);
+        }
+    }
+
+    return identifiers;
+};
+GenerateDerivator.prototype._liveVariablesGetGeneratedFromEmptyStatement = function(statement, program) { return []; }
+GenerateDerivator.prototype._liveVariablesGetGeneratedFromConditionalStatement = function(statement, program)
+{
+    var identifiersMap = ASTHelper.getUniqueIdentifiersMap(statement.test);
+
+    var identifiers = [];
+
+    for(var identifier in identifiersMap)
+    {
+        if(identifiersMap.hasOwnProperty(identifier))
+        {
+            identifiers.push(identifier);
+        }
+    }
+
+    return identifiers;
 }
 
+/*"STATIC" METHODS*/
 GenerateDerivator.instantiateAvailableExpressionsAnalysis = function()
 {
     var generateDerivator = new GenerateDerivator();
@@ -72,6 +113,28 @@ GenerateDerivator.instantiateReachingDefinitionsAnalysis = function()
     generateDerivator._getGeneratedFromAssignmentExpression = generateDerivator._reachingDefinitionsGetGeneratedFromAssignmentExpression;
     generateDerivator._getGeneratedFromEmptyStatement = generateDerivator._reachingDefinitionsGetGeneratedFromEmptyStatement;
     generateDerivator._getGeneratedFromConditionalStatement = generateDerivator._reachingDefinitionsGetGeneratedFromConditionalStatement;
+
+    return generateDerivator;
+};
+
+GenerateDerivator.instantiateVeryBusyExpressionsAnalysis = function()
+{
+    var generateDerivator = new GenerateDerivator();
+
+    generateDerivator._getGeneratedFromAssignmentExpression = generateDerivator._veryBusyExpressionsGetGeneratedFromAssignmentExpression;
+    generateDerivator._getGeneratedFromEmptyStatement = generateDerivator._veryBusyExpressionsGetGeneratedFromEmptyStatement;
+    generateDerivator._getGeneratedFromConditionalStatement = generateDerivator._veryBusyExpressionsGetGeneratedFromConditionalStatement;
+
+    return generateDerivator;
+};
+
+GenerateDerivator.instantiateLiveVariablesAnalysis = function()
+{
+    var generateDerivator = new GenerateDerivator();
+
+    generateDerivator._getGeneratedFromAssignmentExpression = generateDerivator._liveVariablesGetGeneratedFromAssignmentExpression;
+    generateDerivator._getGeneratedFromEmptyStatement = generateDerivator._liveVariablesGetGeneratedFromEmptyStatement;
+    generateDerivator._getGeneratedFromConditionalStatement = generateDerivator._liveVariablesGetGeneratedFromConditionalStatement;
 
     return generateDerivator;
 };

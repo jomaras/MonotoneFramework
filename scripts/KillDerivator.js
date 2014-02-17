@@ -7,6 +7,7 @@ KillDerivator.prototype.getKilled = function(statement, program)
     else if(ASTHelper.isConditionalStatement(statement)) { return this._getKilledFromConditionalStatement(statement, program); }
 };
 
+/*AVAILABLE EXPRESSIONS*/
 KillDerivator.prototype._availableExpressionsGetKilledFromAssignmentExpression = function(statement, program)
 {
     var allArithmeticExpressions = ASTHelper.getArithmeticExpressions(program);
@@ -26,7 +27,10 @@ KillDerivator.prototype._availableExpressionsGetKilledFromAssignmentExpression =
 
     return killedArithmeticExpressions;
 };
+KillDerivator.prototype._availableExpressionsGetKilledFromEmptyStatement = function(statement, program) { return []; }
+KillDerivator.prototype._availableExpressionsGetKilledFromConditionalStatement = function(statement, program) { return []; }
 
+/*REACHING DEFINITIONS*/
 KillDerivator.prototype._reachingDefinitionsGetKilledFromAssignmentExpression = function(statement, program)
 {
     var identifierName = ASTHelper.getAssignedIdentifierName(statement);
@@ -40,7 +44,8 @@ KillDerivator.prototype._reachingDefinitionsGetKilledFromAssignmentExpression = 
     for(var i = 0; i < assignmentExpressionStatements.length; i++)
     {
         var assignmentExpressionStatement = assignmentExpressionStatements[i];
-        if(ASTHelper.containsIdentifierWithName(assignmentExpressionStatement, identifierName))
+
+        if(ASTHelper.getAssignedIdentifierName(assignmentExpressionStatement) == identifierName)
         {
             killed.push({variable: identifierName, label: assignmentExpressionStatement.label});
         }
@@ -48,27 +53,41 @@ KillDerivator.prototype._reachingDefinitionsGetKilledFromAssignmentExpression = 
 
     return killed;
 };
+KillDerivator.prototype._reachingDefinitionsGetKilledFromEmptyStatement = function(statement, program) { return []; }
+KillDerivator.prototype._reachingDefinitionsGetKilledFromConditionalStatement = function(statement, program) { return []; }
 
-KillDerivator.prototype._availableExpressionsGetKilledFromEmptyStatement = function(statement, program)
+/*VERY BUSY EXPRESSIONS*/
+KillDerivator.prototype._veryBusyExpressionsGetKilledFromAssignmentExpression = function(statement, program)
 {
-    return [];
-}
+    var allArithmeticExpressions = ASTHelper.getArithmeticExpressions(program);
 
-KillDerivator.prototype._availableExpressionsGetKilledFromConditionalStatement = function(statement, program)
+    var killedArithmeticExpressions = [];
+    var identifierName = ASTHelper.getAssignedIdentifierName(statement);
+
+    for(var i = 0; i < allArithmeticExpressions.length; i++)
+    {
+        var arithmeticExpression = allArithmeticExpressions[i];
+
+        if(ASTHelper.containsIdentifierWithName(arithmeticExpression, identifierName))
+        {
+            killedArithmeticExpressions.push(arithmeticExpression);
+        }
+    }
+
+    return killedArithmeticExpressions;
+};
+KillDerivator.prototype._veryBusyExpressionsGetKilledFromEmptyStatement = function(statement, program) { return []; }
+KillDerivator.prototype._veryBusyExpressionsGetKilledFromConditionalStatement = function(statement, program) { return []; }
+
+/*LIVE VARIABLES ANALYSIS*/
+KillDerivator.prototype._liveVariablesGetKilledFromAssignmentExpression = function(statement, program)
 {
-    return [];
-}
+    return [ASTHelper.getAssignedIdentifierName(statement)];
+};
+KillDerivator.prototype._liveVariablesGetKilledFromEmptyStatement = function(statement, program) { return []; }
+KillDerivator.prototype._liveVariablesGetKilledFromConditionalStatement = function(statement, program) { return []; }
 
-KillDerivator.prototype._reachingDefinitionsGetKilledFromEmptyStatement = function(statement, program)
-{
-    return [];
-}
-
-KillDerivator.prototype._reachingDefinitionsGetKilledFromConditionalStatement = function(statement, program)
-{
-    return [];
-}
-
+/*"STATIC" METHODS*/
 KillDerivator.instantiateAvailableExpressionsAnalysis = function()
 {
     var killDerivator = new KillDerivator();
@@ -79,7 +98,6 @@ KillDerivator.instantiateAvailableExpressionsAnalysis = function()
 
     return killDerivator;
 };
-
 KillDerivator.instantiateReachingDefinitionsAnalysis = function()
 {
     var killDerivator = new KillDerivator();
@@ -87,6 +105,26 @@ KillDerivator.instantiateReachingDefinitionsAnalysis = function()
     killDerivator._getKilledFromAssignmentExpression = killDerivator._reachingDefinitionsGetKilledFromAssignmentExpression;
     killDerivator._getKilledFromEmptyStatement = killDerivator._reachingDefinitionsGetKilledFromEmptyStatement;
     killDerivator._getKilledFromConditionalStatement = killDerivator._reachingDefinitionsGetKilledFromConditionalStatement;
+
+    return killDerivator;
+};
+KillDerivator.instantiateVeryBusyExpressionsAnalysis = function()
+{
+    var killDerivator = new KillDerivator();
+
+    killDerivator._getKilledFromAssignmentExpression = killDerivator._veryBusyExpressionsGetKilledFromAssignmentExpression;
+    killDerivator._getKilledFromEmptyStatement = killDerivator._veryBusyExpressionsGetKilledFromEmptyStatement;
+    killDerivator._getKilledFromConditionalStatement = killDerivator._veryBusyExpressionsGetKilledFromConditionalStatement;
+
+    return killDerivator;
+};
+KillDerivator.instantiateLiveVariablesAnalysis = function()
+{
+    var killDerivator = new KillDerivator();
+
+    killDerivator._getKilledFromAssignmentExpression = killDerivator._liveVariablesGetKilledFromAssignmentExpression;
+    killDerivator._getKilledFromEmptyStatement = killDerivator._liveVariablesGetKilledFromEmptyStatement;
+    killDerivator._getKilledFromConditionalStatement = killDerivator._liveVariablesGetKilledFromConditionalStatement;
 
     return killDerivator;
 };
