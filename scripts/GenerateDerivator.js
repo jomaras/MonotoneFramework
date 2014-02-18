@@ -94,6 +94,43 @@ GenerateDerivator.prototype._liveVariablesGetGeneratedFromConditionalStatement =
     return identifiers;
 }
 
+/* STRONGLY LIVE VARIABLES*/
+GenerateDerivator.prototype._stronglyLiveVariablesGetGeneratedFromAssignmentExpression = function(statement, program)
+{
+    if(ASTHelper.isExpressionStatement(statement)) { statement = statement.expression; }
+
+    var identifiersMap = ASTHelper.getUniqueIdentifiersMap(statement.right);
+
+    var identifiers = [];
+
+    for(var identifier in identifiersMap)
+    {
+        if(identifiersMap.hasOwnProperty(identifier))
+        {
+            identifiers.push(identifier);
+        }
+    }
+
+    return identifiers;
+};
+GenerateDerivator.prototype._stronglyLiveVariablesGetGeneratedFromEmptyStatement = function(statement, program) { return []; }
+GenerateDerivator.prototype._stronglyLiveVariablesGetGeneratedFromConditionalStatement = function(statement, program)
+{
+    var identifiersMap = ASTHelper.getUniqueIdentifiersMap(statement.test);
+
+    var identifiers = [];
+
+    for(var identifier in identifiersMap)
+    {
+        if(identifiersMap.hasOwnProperty(identifier))
+        {
+            identifiers.push(identifier);
+        }
+    }
+
+    return identifiers;
+}
+
 /*"STATIC" METHODS*/
 GenerateDerivator.instantiateAvailableExpressionsAnalysis = function()
 {
@@ -135,6 +172,17 @@ GenerateDerivator.instantiateLiveVariablesAnalysis = function()
     generateDerivator._getGeneratedFromAssignmentExpression = generateDerivator._liveVariablesGetGeneratedFromAssignmentExpression;
     generateDerivator._getGeneratedFromEmptyStatement = generateDerivator._liveVariablesGetGeneratedFromEmptyStatement;
     generateDerivator._getGeneratedFromConditionalStatement = generateDerivator._liveVariablesGetGeneratedFromConditionalStatement;
+
+    return generateDerivator;
+};
+
+GenerateDerivator.instantiateStronglyLiveVariablesAnalysis = function()
+{
+    var generateDerivator = new GenerateDerivator();
+
+    generateDerivator._getGeneratedFromAssignmentExpression = generateDerivator._stronglyLiveVariablesGetGeneratedFromAssignmentExpression;
+    generateDerivator._getGeneratedFromEmptyStatement = generateDerivator._stronglyLiveVariablesGetGeneratedFromEmptyStatement;
+    generateDerivator._getGeneratedFromConditionalStatement = generateDerivator._stronglyLiveVariablesGetGeneratedFromConditionalStatement;
 
     return generateDerivator;
 };

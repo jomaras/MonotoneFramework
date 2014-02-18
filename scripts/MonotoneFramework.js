@@ -143,6 +143,22 @@ MonotoneFramework.instantiateLiveVariablesAnalysis = function(program, programIn
     );
 };
 
+MonotoneFramework.instantiateStronglyLiveAnalysis = function(program, programInfo)
+{
+    var stronglyLive = new MonotoneFramework
+    (
+        MonotoneFramework.CONST.COMPLETE_LATTICE.VARIABLES,
+        ASTHelper.getUniqueIdentifierNames(program),
+        MonotoneFramework.CONST.PARTIAL_ORDERING.SUBSET_EQ,
+        MonotoneFramework.CONST.ANALYSIS_DIRECTION.BACKWARD,
+        program,
+        programInfo
+    );
+
+    stronglyLive.isStronglyLive = true;
+
+    return stronglyLive;
+},
 
 MonotoneFramework._getVariablesUnknownLabels = function(program)
 {
@@ -156,14 +172,3 @@ MonotoneFramework._getVariablesUnknownLabels = function(program)
 
     return variablesUnknownLabels;
 };
-
-MonotoneFramework.VariableLabel = function(variable, label)
-{
-    this.variable = variable;
-    this.label = label;
-};
-
-MonotoneFramework.VariableLabel.prototype.toString = function()
-{
-    return "(" + this.variable + "," + (this.label || "?") + ")";
-}

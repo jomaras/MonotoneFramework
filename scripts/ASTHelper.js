@@ -115,6 +115,22 @@ var ASTHelper =
         return identifiersMap;
     },
 
+    getUniqueIdentifierNames: function(program)
+    {
+        var identifierMap = this.getUniqueIdentifiersMap(program);
+        var identifiers = [];
+
+        for(var identifier in identifierMap)
+        {
+            if(identifierMap.hasOwnProperty(identifier))
+            {
+                identifiers.push(identifier);
+            }
+        }
+
+        return identifiers;
+    },
+
     getLabelStatementMapping: function(program)
     {
         var labelStatementMapping = {};

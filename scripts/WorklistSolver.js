@@ -7,8 +7,10 @@ JS.require('JS.Set', function(Set)
 
 var WorklistSolver =
 {
-    solveDataFlowEquations: function(monotoneFramework)
+    solve: function(monotoneFramework)
     {
+        if(monotoneFramework != null && monotoneFramework.isStronglyLive) { return this._solveStronglyLiveVariables(monotoneFramework); }
+
         var worklist = monotoneFramework.flow.slice(); //create a copy of flow
         var analysis = {};
 
@@ -74,6 +76,81 @@ var WorklistSolver =
         }
     },
 
+    _solveStronglyLiveVariables: function(monotoneFramework)
+    {
+        var worklist = monotoneFramework.flow.slice(); //create a copy of flow
+        var analysis = {};
+
+        var labelsFromFlow = new JsSet(this._getLabelsFromFlow(monotoneFramework.flow));
+        var extermalLabels = new JsSet(monotoneFramework.extermalLabels);
+
+        var allLabels = labelsFromFlow.union(extermalLabels).toArray();
+
+        for(var i = 0; i < allLabels.length; i++)
+        {
+            var label = allLabels[i];
+
+            if(label != null)
+            {
+                analysis[label] = extermalLabels.contains(label) ? new JsSet(monotoneFramework.extermalValue)
+                                                                 : new JsSet(monotoneFramework.leastElement);
+            }
+        }
+
+        var states = [];
+
+        this._logState(states, worklist, analysis);
+
+        var numberOfIterations = 0;
+        var labelStatementMapping = monotoneFramework.programInfo.labelStatementMapping;
+        while(worklist.length != 0)
+        {
+            var firstElement = worklist.shift();
+
+            var l1 = firstElement.first.label;
+            var l2 = firstElement.second.label;
+
+            if(this._isSatisfied(new JsSet(labelStatementMapping[l1].killed), analysis[l1], monotoneFramework.partialOrdering))
+            {
+                var fAnalysis = this._executeTransferFunction(analysis[l1], l1, monotoneFramework.programInfo.labelStatementMapping);
+
+                if(!this._isSatisfied(fAnalysis, analysis[l2], monotoneFramework.partialOrdering))
+                {
+                    analysis[l2] = monotoneFramework.boundOperation == MonotoneFramework.CONST.BOUND_OPERATION.UNION
+                                 ? analysis[l2].union(fAnalysis)
+                                 : analysis[l2].intersection(fAnalysis);
+
+                    var subsequentFlow = this._getFlowItemsWithFirstLabel(monotoneFramework.flow, l2);
+
+                    for(var i = 0; i < subsequentFlow.length; i++)
+                    {
+                        worklist.unshift(subsequentFlow[i]);
+                    }
+                }
+            }
+            else
+            {
+                analysis[l2] = analysis[l1];
+            }
+
+            this._logState(states, worklist, analysis);
+
+            numberOfIterations++;
+
+            if(numberOfIterations > 0 && numberOfIterations % 100 == 0
+                && prompt("Do you want to cancel the worklist algorithm?"))
+            {
+                break;
+            }
+        }
+
+        return {
+            states: states,
+            inConditions: analysis,
+            outConditions: this._applyStronglyLiveTransferFunction(analysis, monotoneFramework.programInfo.labelStatementMapping, monotoneFramework)
+        }
+    },
+
     _applyTransferFunction: function(analysis, labelStatementMapping)
     {
         var fAnalysis = {};
@@ -83,6 +160,27 @@ var WorklistSolver =
             if(!analysis.hasOwnProperty(label)) { continue; }
 
             fAnalysis[label] = this._executeTransferFunction(analysis[label], label, labelStatementMapping);
+        }
+
+        return fAnalysis;
+    },
+
+    _applyStronglyLiveTransferFunction: function(analysis, labelStatementMapping, monotoneFramework)
+    {
+        var fAnalysis = {};
+
+        for(var label in analysis)
+        {
+            if(!analysis.hasOwnProperty(label)) { continue; }
+
+            if(this._isSatisfied(new JsSet(labelStatementMapping[label].killed), analysis[label], monotoneFramework.partialOrdering))
+            {
+                fAnalysis[label] = this._executeTransferFunction(analysis[label], label, labelStatementMapping);
+            }
+            else
+            {
+                fAnalysis[label] = analysis[label];
+            }
         }
 
         return fAnalysis;

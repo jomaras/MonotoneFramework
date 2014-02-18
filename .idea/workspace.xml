@@ -7,6 +7,7 @@
     <list default="true" id="cf0431a9-c636-46ac-9277-6e0cf2da7b44" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/ASTHelper.js" afterPath="$PROJECT_DIR$/scripts/ASTHelper.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/GenerateDerivator.js" afterPath="$PROJECT_DIR$/scripts/GenerateDerivator.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/KillDerivator.js" afterPath="$PROJECT_DIR$/scripts/KillDerivator.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/MonotoneFramework.js" afterPath="$PROJECT_DIR$/scripts/MonotoneFramework.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/WorklistSolver.js" afterPath="$PROJECT_DIR$/scripts/WorklistSolver.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
@@ -37,10 +38,8 @@
       <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="185" column="0" selection-start="6192" selection-end="6192" vertical-scroll-proportion="-67.11539" vertical-offset="1400" max-vertical-offset="3298">
-              <folding>
-                <element signature="n#style#0;n#table#0;n#div#1;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
+            <state line="93" column="44" selection-start="3406" selection-end="3406" vertical-scroll-proportion="-60.807693" vertical-offset="0" max-vertical-offset="3315">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -48,7 +47,7 @@
       <file leaf-file-name="main.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="89" column="0" selection-start="3160" selection-end="3160" vertical-scroll-proportion="0.0" vertical-offset="1321" max-vertical-offset="6919">
+            <state line="26" column="25" selection-start="1192" selection-end="1192" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="7055">
               <folding />
             </state>
           </provider>
@@ -57,16 +56,7 @@
       <file leaf-file-name="MonotoneFramework.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/MonotoneFramework.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="32" column="40" selection-start="1639" selection-end="1639" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2958">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ASTHelper.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/ASTHelper.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="77" column="89" selection-start="2681" selection-end="2681" vertical-scroll-proportion="0.0" vertical-offset="1066" max-vertical-offset="12614">
+            <state line="150" column="42" selection-start="4757" selection-end="4757" vertical-scroll-proportion="0.0" vertical-offset="2188" max-vertical-offset="3060">
               <folding />
             </state>
           </provider>
@@ -75,7 +65,7 @@
       <file leaf-file-name="KillDerivator.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/KillDerivator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="49" selection-start="2171" selection-end="2171" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2329">
+            <state line="90" column="24" selection-start="3943" selection-end="3943" vertical-scroll-proportion="0.0" vertical-offset="1776" max-vertical-offset="2635">
               <folding />
             </state>
           </provider>
@@ -90,19 +80,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WorklistSolver.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="WorklistSolver.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/WorklistSolver.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="113" column="28" selection-start="3590" selection-end="3590" vertical-scroll-proportion="0.0" vertical-offset="1848" max-vertical-offset="3009">
+            <state line="161" column="79" selection-start="5756" selection-end="5756" vertical-scroll-proportion="0.5080275" vertical-offset="2294" max-vertical-offset="4675">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GenerateDerivator.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="GenerateDerivator.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/GenerateDerivator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="69" column="5" selection-start="3076" selection-end="3076" vertical-scroll-proportion="0.39361703" vertical-offset="951" max-vertical-offset="2465">
+            <state line="176" column="2" selection-start="7102" selection-end="7102" vertical-scroll-proportion="0.0" vertical-offset="2422" max-vertical-offset="3281">
               <folding />
             </state>
           </provider>
@@ -132,12 +122,12 @@
         <option value="$PROJECT_DIR$/scripts/GeneratedDerivator.js" />
         <option value="$PROJECT_DIR$/styles/style.css" />
         <option value="$PROJECT_DIR$/scripts/KillDerivator.js" />
-        <option value="$PROJECT_DIR$/scripts/MonotoneFramework.js" />
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/scripts/main.js" />
         <option value="$PROJECT_DIR$/scripts/ASTHelper.js" />
-        <option value="$PROJECT_DIR$/scripts/WorklistSolver.js" />
         <option value="$PROJECT_DIR$/scripts/GenerateDerivator.js" />
+        <option value="$PROJECT_DIR$/scripts/MonotoneFramework.js" />
+        <option value="$PROJECT_DIR$/scripts/main.js" />
+        <option value="$PROJECT_DIR$/scripts/WorklistSolver.js" />
       </list>
     </option>
   </component>
@@ -173,6 +163,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -191,37 +182,8 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MonotoneFramework" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MonotoneFramework" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="styles" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MonotoneFramework" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MonotoneFramework" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -241,14 +203,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
-      <option name="VMOptions" />
-      <option name="arguments" />
-      <option name="filePath" />
-      <option name="scope" value="ALL" />
-      <option name="testName" />
-      <method />
-    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -259,15 +213,23 @@
       <option name="showConsoleOnStdOut" value="false" />
       <method />
     </configuration>
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
+      <envs />
+      <method />
+    </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
       <setting name="configLocationType" value="CONFIG_FILE" />
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="CHROME" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
-      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
@@ -319,18 +281,24 @@
       <created>1392712410184</created>
       <updated>1392712410184</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="All DataFlow analysis work on book examples">
+      <created>1392719214327</created>
+      <updated>1392719214327</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Included code from JsClass">
+      <created>1392719239015</created>
+      <updated>1392719239015</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="1358" y="-8" width="1696" height="1026" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924107" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32700893" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19951779" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -340,7 +308,9 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32700893" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32924107" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -362,7 +332,9 @@
     <MESSAGE value="Work on gen, kill analysis and display&#10;" />
     <MESSAGE value="Monotone framework working - first results" />
     <MESSAGE value="Refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactoring" />
+    <MESSAGE value="All DataFlow analysis work on book examples" />
+    <MESSAGE value="Included code from JsClass" />
+    <option name="LAST_COMMIT_MESSAGE" value="Included code from JsClass" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -385,9 +357,7 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="111" column="50" selection-start="3975" selection-end="3995" vertical-scroll-proportion="0.0" vertical-offset="1619" max-vertical-offset="3808">
-          <folding>
-            <element signature="n#style#0;n#table#0;n#div#1;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -436,9 +406,7 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="153" column="53" selection-start="5338" selection-end="5360" vertical-scroll-proportion="0.0" vertical-offset="2601" max-vertical-offset="3808">
-          <folding>
-            <element signature="n#style#0;n#table#0;n#div#1;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -480,9 +448,7 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="100" column="74" selection-start="3771" selection-end="3771" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2822">
-          <folding>
-            <element signature="n#style#0;n#table#0;n#div#1;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -510,9 +476,7 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="52" column="25" selection-start="1819" selection-end="1819" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2091">
-          <folding>
-            <element signature="n#style#0;n#table#0;n#div#1;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -552,9 +516,7 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="52" column="25" selection-start="1819" selection-end="1819" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2091">
-          <folding>
-            <element signature="n#style#0;n#table#0;n#div#1;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -594,9 +556,7 @@
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="48" column="17" selection-start="1427" selection-end="1427" vertical-scroll-proportion="0.0" vertical-offset="629" max-vertical-offset="2006">
-          <folding>
-            <element signature="n#style#0;n#table#0;n#div#1;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -668,53 +628,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/KillDerivator.js">
+    <entry file="file://$PROJECT_DIR$/scripts/GenerateDerivator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="49" selection-start="2171" selection-end="2171" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2329">
+        <state line="176" column="2" selection-start="7102" selection-end="7102" vertical-scroll-proportion="0.0" vertical-offset="2422" max-vertical-offset="3281">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
+    <entry file="file://$PROJECT_DIR$/scripts/KillDerivator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="185" column="0" selection-start="6192" selection-end="6192" vertical-scroll-proportion="-67.11539" vertical-offset="1400" max-vertical-offset="3298">
-          <folding>
-            <element signature="n#style#0;n#table#0;n#div#1;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+        <state line="90" column="24" selection-start="3943" selection-end="3943" vertical-scroll-proportion="0.0" vertical-offset="1776" max-vertical-offset="2635">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/ASTHelper.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="77" column="89" selection-start="2681" selection-end="2681" vertical-scroll-proportion="0.0" vertical-offset="1066" max-vertical-offset="12614">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/WorklistSolver.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="28" selection-start="3590" selection-end="3590" vertical-scroll-proportion="0.0" vertical-offset="1848" max-vertical-offset="3009">
+        <state line="117" column="23" selection-start="3608" selection-end="3632" vertical-scroll-proportion="0.8394495" vertical-offset="1257" max-vertical-offset="12886">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/MonotoneFramework.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="40" selection-start="1639" selection-end="1639" vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="2958">
+        <state line="150" column="42" selection-start="4757" selection-end="4757" vertical-scroll-proportion="0.0" vertical-offset="2188" max-vertical-offset="3060">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="93" column="44" selection-start="3406" selection-end="3406" vertical-scroll-proportion="-60.807693" vertical-offset="0" max-vertical-offset="3315">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="89" column="0" selection-start="3160" selection-end="3160" vertical-scroll-proportion="0.0" vertical-offset="1321" max-vertical-offset="6919">
+        <state line="26" column="25" selection-start="1192" selection-end="1192" vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="7055">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/GenerateDerivator.js">
+    <entry file="file://$PROJECT_DIR$/scripts/WorklistSolver.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="5" selection-start="3076" selection-end="3076" vertical-scroll-proportion="0.39361703" vertical-offset="951" max-vertical-offset="2465">
+        <state line="161" column="79" selection-start="5756" selection-end="5756" vertical-scroll-proportion="0.5080275" vertical-offset="2294" max-vertical-offset="4675">
           <folding />
         </state>
       </provider>

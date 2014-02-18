@@ -87,6 +87,14 @@ KillDerivator.prototype._liveVariablesGetKilledFromAssignmentExpression = functi
 KillDerivator.prototype._liveVariablesGetKilledFromEmptyStatement = function(statement, program) { return []; }
 KillDerivator.prototype._liveVariablesGetKilledFromConditionalStatement = function(statement, program) { return []; }
 
+/*STRONGLY LIVE VARIABLES ANALYSIS*/
+KillDerivator.prototype._stronglyLiveVariablesGetKilledFromAssignmentExpression = function(statement, program)
+{
+    return [ASTHelper.getAssignedIdentifierName(statement)];
+};
+KillDerivator.prototype._stronglyLiveVariablesGetKilledFromEmptyStatement = function(statement, program) { return []; }
+KillDerivator.prototype._stronglyLiveVariablesGetKilledFromConditionalStatement = function(statement, program) { return []; }
+
 /*"STATIC" METHODS*/
 KillDerivator.instantiateAvailableExpressionsAnalysis = function()
 {
@@ -125,6 +133,16 @@ KillDerivator.instantiateLiveVariablesAnalysis = function()
     killDerivator._getKilledFromAssignmentExpression = killDerivator._liveVariablesGetKilledFromAssignmentExpression;
     killDerivator._getKilledFromEmptyStatement = killDerivator._liveVariablesGetKilledFromEmptyStatement;
     killDerivator._getKilledFromConditionalStatement = killDerivator._liveVariablesGetKilledFromConditionalStatement;
+
+    return killDerivator;
+};
+KillDerivator.instantiateStronglyLiveVariablesAnalysis = function()
+{
+    var killDerivator = new KillDerivator();
+
+    killDerivator._getKilledFromAssignmentExpression = killDerivator._stronglyLiveVariablesGetKilledFromAssignmentExpression;
+    killDerivator._getKilledFromEmptyStatement = killDerivator._stronglyLiveVariablesGetKilledFromEmptyStatement;
+    killDerivator._getKilledFromConditionalStatement = killDerivator._stronglyLiveVariablesGetKilledFromConditionalStatement;
 
     return killDerivator;
 };

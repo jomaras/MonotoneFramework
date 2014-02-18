@@ -23,7 +23,8 @@ window.onload = function ()
         "x = a + b;\ny = a * b;\n\nwhile (y > a + b)\n{\n\ta = a + 1;\n\tx = a + b;\n}\n",
         "x = 5;\ny = 1;\nwhile (x > 1)\n{\n\ty = x * y;\n\tx = x - 1;\n}\n",
         "if(a > b)\n{\n\tx = b - a;\n\ty = a - b;\n}\nelse\n{\n\ty = b - a;\n\tx = a - b;\n}",
-        "x = 2;\ny = 4;\nx = 1;\nif(y > x)\n\tz = y\nelse\n\tz = y * y;\nx = z;"
+        "x = 2;\ny = 4;\nx = 1;\nif(y > x)\n\tz = y\nelse\n\tz = y * y;\nx = z;",
+        "x = 1;\nx = x - 1;\nx = 2;"
     ];
 
     for(var i = 0; i < examples.length; i++)
@@ -55,7 +56,8 @@ window.onload = function ()
         availableExpressions: "AVAILABLE_EXPRESSIONS",
         reachingDefinitions: "REACHING_DEFINITIONS",
         veryBusyExpressions: "VERY_BUSY",
-        liveVariables: "LIVE_VARIABLES"
+        liveVariables: "LIVE_VARIABLES",
+        stronglyLiveVariables: "STRONGLY_LIVE_VARIABLES"
     };
 
     var analysisSelector = document.getElementById("analysisSelector");
@@ -254,6 +256,8 @@ window.onload = function ()
                 return KillDerivator.instantiateVeryBusyExpressionsAnalysis();
             case analysisType.liveVariables:
                 return KillDerivator.instantiateLiveVariablesAnalysis();
+            case analysisType.stronglyLiveVariables:
+                return KillDerivator.instantiateStronglyLiveVariablesAnalysis();
             default:
         }
     }
@@ -270,6 +274,8 @@ window.onload = function ()
                 return GenerateDerivator.instantiateVeryBusyExpressionsAnalysis();
             case analysisType.liveVariables:
                 return GenerateDerivator.instantiateLiveVariablesAnalysis();
+            case analysisType.stronglyLiveVariables:
+                return GenerateDerivator.instantiateStronglyLiveVariablesAnalysis();
             default:
         }
     }
@@ -320,7 +326,7 @@ window.onload = function ()
 
             var monotoneFramework = getMonotoneFramework();
 
-            var result = WorklistSolver.solveDataFlowEquations(monotoneFramework);
+            var result = WorklistSolver.solve(monotoneFramework);
 
             var inConditions = monotoneFramework.isForwardAnalysis() ? result.inConditions : result.outConditions;
             var outConditions = monotoneFramework.isForwardAnalysis() ? result.outConditions : result.inConditions;
@@ -381,6 +387,8 @@ window.onload = function ()
                 return MonotoneFramework.instantiateReachingDefinitionsAnalysis(currentProgram, currentProgramInfo);
             case analysisType.veryBusyExpressions:
                 return MonotoneFramework.instantiateVeryBusyExpressionsAnalysis(currentProgram, currentProgramInfo);
+            case analysisType.stronglyLiveVariables:
+                return MonotoneFramework.instantiateStronglyLiveAnalysis(currentProgram, currentProgramInfo);
             default:
                 return MonotoneFramework.instantiateAvailableExpressionsAnalysis(currentProgram, currentProgramInfo);
         }
