@@ -73,12 +73,12 @@ div#info {
 
 }
 
-.analysisResultsTable td:first-child
+#analysisResultsTable td:first-child
 {
     width: 15px;
 }
 
-.analysisResultsTable td
+#analysisSelector
 {
-    width: 120px;
+    width: 180px;
 }

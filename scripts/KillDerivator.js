@@ -21,7 +21,7 @@ KillDerivator.prototype._availableExpressionsGetKilledFromAssignmentExpression =
 
         if(ASTHelper.containsIdentifierWithName(arithmeticExpression, identifierName))
         {
-            killedArithmeticExpressions.push(arithmeticExpression);
+            killedArithmeticExpressions.push(ASTHelper.getCode(arithmeticExpression));
         }
     }
 
@@ -37,7 +37,7 @@ KillDerivator.prototype._reachingDefinitionsGetKilledFromAssignmentExpression = 
 
     var killed = [];
 
-    killed.push({variable: identifierName, label: null});
+    killed.push("(" + identifierName + ",?)");
 
     var assignmentExpressionStatements = ASTHelper.getAssignmentExpressionStatements(program);
 
@@ -47,7 +47,7 @@ KillDerivator.prototype._reachingDefinitionsGetKilledFromAssignmentExpression = 
 
         if(ASTHelper.getAssignedIdentifierName(assignmentExpressionStatement) == identifierName)
         {
-            killed.push({variable: identifierName, label: assignmentExpressionStatement.label});
+            killed.push("(" + identifierName + "," + assignmentExpressionStatement.label + ")");
         }
     }
 
@@ -70,7 +70,7 @@ KillDerivator.prototype._veryBusyExpressionsGetKilledFromAssignmentExpression = 
 
         if(ASTHelper.containsIdentifierWithName(arithmeticExpression, identifierName))
         {
-            killedArithmeticExpressions.push(arithmeticExpression);
+            killedArithmeticExpressions.push(ASTHelper.getCode(arithmeticExpression));
         }
     }
 

@@ -85,79 +85,33 @@
     </div>
 
     <div class="six columns">
-        <dl class="tabs">
-            <dd id="availableExpressionsHeader" class="active"><a href="#">AE</a></dd>
-            <dd id="reachingDefinitionsHeader"><a href="#">RD</a></dd>
-            <dd id="veryBusyExpressionsHeader"><a href="#">VB</a></dd>
-            <dd id="liveVariablesHeader"><a href="#">LV</a></dd>
-        </dl>
-        <ul class="tabs-content">
-            <li class="active" id="availableExpressionsTab">
-                <table class="analysisResultsTable">
-                    <thead>
-                    <tr>
-                        <th>l</th>
-                        <th>kill(l)</th>
-                        <th>gen(l)</th>
-                    </tr>
-                    </thead>
-                    <tbody id="availableExpressionTableBody">
+        <select id="analysisSelector">
+            <option value="" disabled="disabled" selected="selected">Select Analysis</option>
+            <option value="AVAILABLE_EXPRESSIONS">Available Expressions</option>
+            <option value="REACHING_DEFINITIONS">Reaching Definitions</option>
+            <option value="VERY_BUSY">Very Busy Expressions</option>
+            <option value="LIVE_VARIABLES">Live Variables</option>
+        </select>
 
-                    </tbody>
-                </table>
-            </li>
-            <li></li>
-            <li id="reachingDefinitionsTab" style="display:none;">
-                <table class="analysisResultsTable">
-                    <thead>
-                    <tr>
-                        <th>l</th>
-                        <th>kill(l)</th>
-                        <th>gen(l)</th>
-                    </tr>
-                    </thead>
-                    <tbody id="reachingDefinitionsTableBody">
+        <table id="analysisResultsTable">
+            <thead>
+            <tr>
+                <th>l</th>
+                <th>kill(l)</th>
+                <th>gen(l)</th>
+                <th>entry(l)</th>
+                <th>exit(l)</th>
+            </tr>
+            </thead>
+            <tbody id="analysisResultsTableBody">
 
-                    </tbody>
-                </table>
-            </li>
-            <li id="veryBusyExpressionsTab" style="display:none;">
-                <table class="analysisResultsTable">
-                    <thead>
-                    <tr>
-                        <th>l</th>
-                        <th>kill(l)</th>
-                        <th>gen(l)</th>
-                    </tr>
-                    </thead>
-                    <tbody id="veryBusyExpressionsTableBody">
-
-                    </tbody>
-                </table>
-            </li>
-            <li id="liveVariablesTab" style="display:none;">
-                <table class="analysisResultsTable">
-                    <thead>
-                    <tr>
-                        <th>l</th>
-                        <th>kill(l)</th>
-                        <th>gen(l)</th>
-                    </tr>
-                    </thead>
-                    <tbody id="liveVariablesTableBody">
-
-                    </tbody>
-                </table>
-            </li>
-            <li></li>
-        </ul>
+            </tbody>
+        </table>
     </div>
-
 </div>
 
 <div class="row">
-    <div class = "twelve columns">
-        <input type="button" value="Start Worklist algorithm" id="startWorklistAlgorithmButton"/>
+    <div class="twelve columns">
         <div id="workListAlgorithmContainer" style="display:none; ">
             <label>Worklist algorithm execution: </label><br/>
             <table>

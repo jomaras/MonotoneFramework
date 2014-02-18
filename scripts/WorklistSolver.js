@@ -57,7 +57,25 @@ var WorklistSolver =
             }
         }
 
-        return analysis;
+        return {
+            states: states,
+            inConditions: analysis,
+            outConditions: this._applyTransferFunction(analysis, monotoneFramework.programInfo.labelStatementMapping)
+        }
+    },
+
+    _applyTransferFunction: function(analysis, labelStatementMapping)
+    {
+        var fAnalysis = {};
+
+        for(var label in analysis)
+        {
+            if(!analysis.hasOwnProperty(label)) { continue; }
+
+            fAnalysis[label] = this._executeTransferFunction(analysis[label], label, labelStatementMapping);
+        }
+
+        return fAnalysis;
     },
 
     _logState: function(state, worklist, analysis)
@@ -65,12 +83,12 @@ var WorklistSolver =
         var item = {
             W: worklist.map(function(item){
                 return "(" + item.first.label + ", " + item.second.label + ")";
-            }).join(", ")
+            }).join(", ") || "()"
         };
 
         for(var label in analysis)
         {
-            item[label] = analysis[label].join(", ");
+            item[label] = "{" + analysis[label].join(", ") + "}";
         }
 
         state.push(item);
@@ -169,22 +187,7 @@ var WorklistSolver =
 
     _executeTransferFunction: function(currentAnalysisValue, label, labelStatementMapping)
     {
-        var killed = this._covertToCodeExpressions(labelStatementMapping[label].killed);
-        var generated = this._covertToCodeExpressions(labelStatementMapping[label].generated);
-
-        return this._performUnion(this._removeFromSet(currentAnalysisValue, killed), generated);
-    },
-
-    _covertToCodeExpressions: function(items)
-    {
-        var codeExpressions = [];
-
-        for(var i = 0; i < items.length; i++)
-        {
-            codeExpressions.push(ASTHelper.getCode(items[i]))
-        }
-
-        return codeExpressions;
+        return this._performUnion(this._removeFromSet(currentAnalysisValue, labelStatementMapping[label].killed), labelStatementMapping[label].generated);
     },
 
     _removeFromSet: function(mainSet, setToRemove)

@@ -38,6 +38,11 @@ function MonotoneFramework(completeLattice, extermalValue, partialOrdering, anal
     }
 }
 
+MonotoneFramework.prototype.isForwardAnalysis = function()
+{
+    return this.analysisDirection === MonotoneFramework.CONST.ANALYSIS_DIRECTION.FORWARD;
+};
+
 MonotoneFramework.CONST =
 {
     COMPLETE_LATTICE:
@@ -146,8 +151,19 @@ MonotoneFramework._getVariablesUnknownLabels = function(program)
 
     for(var identifier in identifiersMap)
     {
-        variablesUnknownLabels.push({variable: identifier, label: null});
+        variablesUnknownLabels.push(new MonotoneFramework.VariableLabel(identifier, null).toString());
     }
 
     return variablesUnknownLabels;
 };
+
+MonotoneFramework.VariableLabel = function(variable, label)
+{
+    this.variable = variable;
+    this.label = label;
+};
+
+MonotoneFramework.VariableLabel.prototype.toString = function()
+{
+    return "(" + this.variable + ", " + (this.label || "?") + ")";
+}

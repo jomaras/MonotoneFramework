@@ -21,7 +21,7 @@ GenerateDerivator.prototype._availableExpressionsGetGeneratedFromAssignmentExpre
 
         if(!ASTHelper.containsIdentifierWithName(arithmeticExpression, identifierName))
         {
-            generatedArithmeticExpressions.push(arithmeticExpression);
+            generatedArithmeticExpressions.push(ASTHelper.getCode(arithmeticExpression));
         }
     }
 
@@ -30,7 +30,7 @@ GenerateDerivator.prototype._availableExpressionsGetGeneratedFromAssignmentExpre
 GenerateDerivator.prototype._availableExpressionsGetGeneratedFromEmptyStatement = function(statement, program) { return []; }
 GenerateDerivator.prototype._availableExpressionsGetGeneratedFromConditionalStatement = function(statement, program)
 {
-    return ASTHelper.getArithmeticExpressions(statement.test);
+    return ASTHelper.getArithmeticExpressionsAsCode(statement.test);
 }
 
 
@@ -39,7 +39,7 @@ GenerateDerivator.prototype._reachingDefinitionsGetGeneratedFromAssignmentExpres
 {
     if(!ASTHelper.isAssignmentExpressionStatement(statement)) { return []; }
 
-    return [{variable: ASTHelper.getAssignedIdentifierName(statement), label: statement.label}];
+    return ["(" + ASTHelper.getAssignedIdentifierName(statement) + "," + statement.label + ")"];
 };
 GenerateDerivator.prototype._reachingDefinitionsGetGeneratedFromEmptyStatement = function(statement, program) { return []; }
 GenerateDerivator.prototype._reachingDefinitionsGetGeneratedFromConditionalStatement = function(statement, program) { return []; }
@@ -48,12 +48,12 @@ GenerateDerivator.prototype._reachingDefinitionsGetGeneratedFromConditionalState
 /*VERY BUSY EXPRESSIONS*/
 GenerateDerivator.prototype._veryBusyExpressionsGetGeneratedFromAssignmentExpression = function(statement, program)
 {
-    return ASTHelper.getArithmeticExpressions(statement);
+    return ASTHelper.getArithmeticExpressionsAsCode(statement);
 };
 GenerateDerivator.prototype._veryBusyExpressionsGetGeneratedFromEmptyStatement = function(statement, program) { return []; }
 GenerateDerivator.prototype._veryBusyExpressionsGetGeneratedFromConditionalStatement = function(statement, program)
 {
-    return ASTHelper.getArithmeticExpressions(statement.test);
+    return ASTHelper.getArithmeticExpressionsAsCode(statement.test);
 }
 
 
@@ -87,7 +87,7 @@ GenerateDerivator.prototype._liveVariablesGetGeneratedFromConditionalStatement =
     {
         if(identifiersMap.hasOwnProperty(identifier))
         {
-            identifiers.push(identifier);
+            identifiers.push(identifier.name);
         }
     }
 

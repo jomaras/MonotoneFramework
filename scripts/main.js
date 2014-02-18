@@ -6,29 +6,14 @@ window.onload = function ()
     var graphContainer = document.getElementById("graphContainer");
     var flowContainer = document.getElementById("flowContainer");
 
-    var availableExpressionsHeader = document.getElementById("availableExpressionsHeader");
-    var reachingDefinitionsHeader = document.getElementById("reachingDefinitionsHeader");
-    var veryBusyExpressionsHeader = document.getElementById("veryBusyExpressionsHeader");
-    var liveVariablesHeader = document.getElementById("liveVariablesHeader");
+    var examplesContainer = document.getElementById("examplesContainer");
 
-    var availableExpressionsTab = document.getElementById("availableExpressionsTab");
-    var reachingDefinitionsTab = document.getElementById("reachingDefinitionsTab");
-    var veryBusyExpressionsTab = document.getElementById("veryBusyExpressionsTab");
-    var liveVariablesTab = document.getElementById("liveVariablesTab");
+    var analysisResultsTableBody = document.getElementById("analysisResultsTableBody");
 
     var monotoneFrameworkAnalysisResultsHeaderRow = document.getElementById("monotoneFrameworkAnalysisResultsHeaderRow");
     var monotoneFrameworkAnalysisResultsBody = document.getElementById("monotoneFrameworkAnalysisResultsBody");
 
-    var startWorklistAlgorithmButton = document.getElementById("startWorklistAlgorithmButton");
     var workListAlgorithmContainer = document.getElementById("workListAlgorithmContainer");
-
-    startWorklistAlgorithmButton.onclick = function()
-    {
-        startWorklistAlgorithm();
-        workListAlgorithmContainer.style.display = "";
-    };
-
-    var examplesContainer = document.getElementById("examplesContainer");
 
     var currentProgram = null;
     var currentProgramInfo = null;
@@ -73,82 +58,18 @@ window.onload = function ()
         liveVariables: "LIVE_VARIABLES"
     };
 
+    var analysisSelector = document.getElementById("analysisSelector");
+    var workListAlgorithmContainer = document.getElementById("workListAlgorithmContainer");
+
     var selectedAnalysisType = analysisType.availableExpressions;
 
-    availableExpressionsHeader.onclick = function ()
+    analysisSelector.onchange = function()
     {
-        reachingDefinitionsTab.className = reachingDefinitionsHeader.className = '';
-        availableExpressionsTab.className = availableExpressionsHeader.className = 'active';
-        veryBusyExpressionsTab.className = veryBusyExpressionsHeader.className = '';
-        liveVariablesTab.className = liveVariablesHeader.className = '';
+        selectedAnalysisType = this.value;
 
-        reachingDefinitionsTab.style.display = 'none';
-        availableExpressionsTab.style.display = '';
-        veryBusyExpressionsTab.style.display = 'none';
-        liveVariablesTab.style.display = 'none';
+        startWorklistAlgorithm();
 
-        selectedAnalysisType = analysisType.availableExpressions;
-
-        computeKilledGenerated(currentProgram, currentProgramInfo);
-
-        return false;
-    };
-
-    reachingDefinitionsHeader.onclick = function ()
-    {
-        reachingDefinitionsTab.className = reachingDefinitionsHeader.className = 'active';
-        availableExpressionsTab.className = availableExpressionsHeader.className = '';
-        veryBusyExpressionsTab.className = veryBusyExpressionsHeader.className = '';
-        liveVariablesTab.className = liveVariablesHeader.className = '';
-
-        reachingDefinitionsTab.style.display = '';
-        availableExpressionsTab.style.display = 'none';
-        veryBusyExpressionsTab.style.display = 'none';
-        liveVariablesTab.style.display = 'none';
-
-        selectedAnalysisType = analysisType.reachingDefinitions;
-
-        computeKilledGenerated(currentProgram, currentProgramInfo);
-
-        return false;
-    };
-
-    veryBusyExpressionsHeader.onclick = function ()
-    {
-        reachingDefinitionsTab.className  = reachingDefinitionsHeader.className = '';
-        availableExpressionsTab.className = availableExpressionsHeader.className = '';
-        veryBusyExpressionsTab.className  = veryBusyExpressionsHeader.className = 'active';
-        liveVariablesTab.className = liveVariablesHeader.className = '';
-
-        reachingDefinitionsTab.style.display = 'none';
-        availableExpressionsTab.style.display = 'none';
-        veryBusyExpressionsTab.style.display = '';
-        liveVariablesTab.style.display = 'none';
-
-        selectedAnalysisType = analysisType.veryBusyExpressions;
-
-        computeKilledGenerated(currentProgram, currentProgramInfo);
-
-        return false;
-    };
-
-    liveVariablesHeader.onclick = function()
-    {
-        reachingDefinitionsTab.className  = reachingDefinitionsHeader.className = '';
-        availableExpressionsTab.className = availableExpressionsHeader.className = '';
-        veryBusyExpressionsTab.className  = veryBusyExpressionsHeader.className = '';
-        liveVariablesTab.className = liveVariablesHeader.className = 'active';
-
-        reachingDefinitionsTab.style.display = 'none';
-        availableExpressionsTab.style.display = 'none';
-        veryBusyExpressionsTab.style.display = 'none';
-        liveVariablesTab.style.display = '';
-
-        selectedAnalysisType = analysisType.liveVariables;
-
-        computeKilledGenerated(currentProgram, currentProgramInfo);
-
-        return false;
+        workListAlgorithmContainer.style.display = "";
     };
 
     function parse(delay)
@@ -161,6 +82,8 @@ window.onload = function ()
 
             try
             {
+                resetWorklistResults();
+
                 var program = esprima.parse(window.editor.getText(), {loc: true});
 
                 currentProgram = program;
@@ -180,8 +103,6 @@ window.onload = function ()
 
                 buildFlowGraph(statements, programInfo.flow, programInfo.labelStatementMapping);
 
-                computeKilledGenerated(program, programInfo);
-
                 infoElement.innerHTML = 'No error';
             }
             catch (e)
@@ -194,6 +115,13 @@ window.onload = function ()
 
             parseId = undefined;
         }, delay || 1000);
+    }
+
+    function resetWorklistResults()
+    {
+        workListAlgorithmContainer.style.display = "none";
+        analysisResultsTableBody.innerHTML = "";
+        analysisSelector.selectedIndex = 0
     }
 
     function deriveProgramInfo(program)
@@ -302,121 +230,53 @@ window.onload = function ()
     {
         if(program == null || programInfo == null) { return; }
 
+        var labelMapping = programInfo.labelStatementMapping;
+
+        var killDerivator = getKillDerivator();
+        var generatorDerivator = getGenerateDerivator();
+
+        for(var label in labelMapping)
+        {
+            labelMapping[label].killed = killDerivator.getKilled(labelMapping[label].statement, program);
+            labelMapping[label].generated = generatorDerivator.getGenerated(labelMapping[label].statement, program);
+        }
+    }
+
+    function getKillDerivator()
+    {
         switch (selectedAnalysisType)
         {
             case analysisType.availableExpressions:
-                computeKilledGeneratedAvailableExpressionsAnalysis(program, programInfo);
-                break;
+                return KillDerivator.instantiateAvailableExpressionsAnalysis();
             case analysisType.reachingDefinitions:
-                computeKilledGeneratedReachingDefinitionsAnalysis(program, programInfo);
-                break;
+                return KillDerivator.instantiateReachingDefinitionsAnalysis();
             case analysisType.veryBusyExpressions:
-                computeKilledGeneratedVeryBusyExpressionsAnalysis(program, programInfo);
+                return KillDerivator.instantiateVeryBusyExpressionsAnalysis();
             case analysisType.liveVariables:
-                computeKilledGeneratedLiveVariablesAnalysis(program, programInfo);
+                return KillDerivator.instantiateLiveVariablesAnalysis();
             default:
         }
     }
 
-    function computeKilledGeneratedAvailableExpressionsAnalysis(program, programInfo)
+    function getGenerateDerivator()
     {
-        var labelMapping = programInfo.labelStatementMapping;
-        var killDerivator = KillDerivator.instantiateAvailableExpressionsAnalysis();
-        var generateDerivator = GenerateDerivator.instantiateAvailableExpressionsAnalysis();
-
-        for(var label in labelMapping)
+        switch (selectedAnalysisType)
         {
-            labelMapping[label].killed = killDerivator.getKilled(labelMapping[label].statement, program);
-            labelMapping[label].generated = generateDerivator.getGenerated(labelMapping[label].statement, program);
-        }
-
-        notifyKilledGeneratedAnalysisResultsExpression(availableExpressionTableBody, programInfo);
-    }
-
-    function computeKilledGeneratedReachingDefinitionsAnalysis(program, programInfo)
-    {
-        var labelMapping = programInfo.labelStatementMapping;
-        var killDerivator = KillDerivator.instantiateReachingDefinitionsAnalysis();
-        var generateDerivator = GenerateDerivator.instantiateReachingDefinitionsAnalysis();
-
-        for(var label in labelMapping)
-        {
-            labelMapping[label].killed = killDerivator.getKilled(labelMapping[label].statement, program);
-            labelMapping[label].generated = generateDerivator.getGenerated(labelMapping[label].statement, program);
-        }
-
-        notifyKilledGeneratedAnalysisResultsVariablesAndLabels(reachingDefinitionsTableBody, programInfo);
-    }
-
-    function computeKilledGeneratedVeryBusyExpressionsAnalysis(program, programInfo)
-    {
-        var labelMapping = programInfo.labelStatementMapping;
-        var killDerivator = KillDerivator.instantiateVeryBusyExpressionsAnalysis();
-        var generatorDerivator = GenerateDerivator.instantiateVeryBusyExpressionsAnalysis();
-
-        for(var label in labelMapping)
-        {
-            labelMapping[label].killed = killDerivator.getKilled(labelMapping[label].statement, program);
-            labelMapping[label].generated = generatorDerivator.getGenerated(labelMapping[label].statement, program);
-        }
-
-        notifyKilledGeneratedAnalysisResultsExpression(veryBusyExpressionsTableBody, programInfo);
-    }
-
-    function computeKilledGeneratedLiveVariablesAnalysis(program, programInfo)
-    {
-        var labelMapping = programInfo.labelStatementMapping;
-        var killDerivator = KillDerivator.instantiateLiveVariablesAnalysis();
-        var generatorDerivator = GenerateDerivator.instantiateLiveVariablesAnalysis();
-
-        for(var label in labelMapping)
-        {
-            labelMapping[label].killed = killDerivator.getKilled(labelMapping[label].statement, program);
-            labelMapping[label].generated = generatorDerivator.getGenerated(labelMapping[label].statement, program);
-        }
-
-        notifyKilledGeneratedAnalysisResultsVariables(liveVariablesTableBody, programInfo);
-    }
-
-    function notifyKilledGeneratedAnalysisResultsExpression(tableBody, programInfo)
-    {
-        tableBody.innerHTML = "";
-
-        var labelMapping = programInfo.labelStatementMapping;
-
-        for(var label in labelMapping)
-        {
-            var row = document.createElement("tr");
-
-            row.appendChild(createCell(label));
-            row.appendChild(createCell(ASTHelper.getExpressionsCodeAsSetString(labelMapping[label].killed)));
-            row.appendChild(createCell(ASTHelper.getExpressionsCodeAsSetString(labelMapping[label].generated)));
-
-            tableBody.appendChild(row);
+            case analysisType.availableExpressions:
+                return GenerateDerivator.instantiateAvailableExpressionsAnalysis();
+            case analysisType.reachingDefinitions:
+                return GenerateDerivator.instantiateReachingDefinitionsAnalysis();
+            case analysisType.veryBusyExpressions:
+                return GenerateDerivator.instantiateVeryBusyExpressionsAnalysis();
+            case analysisType.liveVariables:
+                return GenerateDerivator.instantiateLiveVariablesAnalysis();
+            default:
         }
     }
 
-    function notifyKilledGeneratedAnalysisResultsVariablesAndLabels(tableBody, programInfo)
+    function notifyAnalysisResults(programInfo)
     {
-        tableBody.innerHTML = "";
-
-        var labelMapping = programInfo.labelStatementMapping;
-
-        for(var label in labelMapping)
-        {
-            var row = document.createElement("tr");
-
-            row.appendChild(createCell(label));
-            row.appendChild(createCell(getVariablesAndLabelsString(labelMapping[label].killed)));
-            row.appendChild(createCell(getVariablesAndLabelsString(labelMapping[label].generated)));
-
-            tableBody.appendChild(row);
-        }
-    }
-
-    function notifyKilledGeneratedAnalysisResultsVariables(tableBody, programInfo)
-    {
-        tableBody.innerHTML = "";
+        analysisResultsTableBody.innerHTML = "";
 
         var labelMapping = programInfo.labelStatementMapping;
 
@@ -426,24 +286,12 @@ window.onload = function ()
 
             row.appendChild(createCell(label));
             row.appendChild(createCell("{" + labelMapping[label].killed.join(", ") + "}"));
-            row.appendChild(createCell("{" + labelMapping[label].generated.join(",") + "}"));
+            row.appendChild(createCell("{" + labelMapping[label].generated.join(", ") + "}"));
+            row.appendChild(createCell("{" + labelMapping[label].inCondition + "}"));
+            row.appendChild(createCell("{" + labelMapping[label].outCondition + "}"));
 
-            tableBody.appendChild(row);
+            analysisResultsTableBody.appendChild(row);
         }
-    }
-
-    function getVariablesAndLabelsString(variablesAndLabels)
-    {
-        var string = "{";
-
-        for(var i = 0; i < variablesAndLabels.length; i++)
-        {
-            if(i != 0) { string += ", "; }
-
-            string += "(" + variablesAndLabels[i].variable + "," + (variablesAndLabels[i].label || "?") + ")";
-        }
-
-        return string + "}";
     }
 
     function createCell(text)
@@ -455,12 +303,88 @@ window.onload = function ()
         return cell;
     }
 
+    function createHeaderCell(text)
+    {
+        var cell = document.createElement("th");
+
+        cell.textContent = text;
+
+        return cell;
+    }
+
     function startWorklistAlgorithm()
     {
         if(currentProgram != null && currentProgramInfo != null)
         {
-            WorklistSolver.solveDataFlowEquations(MonotoneFramework.instantiateAvailableExpressionsAnalysis(currentProgram, currentProgramInfo));
+            computeKilledGenerated(currentProgram, currentProgramInfo);
+
+            var monotoneFramework = getMonotoneFramework();
+
+            var result = WorklistSolver.solveDataFlowEquations(monotoneFramework);
+
+            var inConditions = monotoneFramework.isForwardAnalysis() ? result.inConditions : result.outConditions;
+            var outConditions = monotoneFramework.isForwardAnalysis() ? result.outConditions : result.inConditions;
+
+            for(var label in inConditions)
+            {
+                currentProgramInfo.labelStatementMapping[label].inCondition = inConditions[label];
+            }
+
+            for(var label in outConditions)
+            {
+                currentProgramInfo.labelStatementMapping[label].outCondition = outConditions[label];
+            }
+
+            notifyAnalysisResults(currentProgramInfo);
+
+            monotoneFrameworkAnalysisResultsHeaderRow.innerHTML = "";
+
+            monotoneFrameworkAnalysisResultsHeaderRow.appendChild(createHeaderCell("#"));
+            monotoneFrameworkAnalysisResultsHeaderRow.appendChild(createHeaderCell("W"));
+
+            var labels = currentProgramInfo.labels;
+
+            for(var i = 0; i < labels.length; i++)
+            {
+                monotoneFrameworkAnalysisResultsHeaderRow.appendChild(createHeaderCell(labels[i]));
+            }
+
+            monotoneFrameworkAnalysisResultsBody.innerHTML = "";
+
+            for(var i = 0; i < result.states.length; i++)
+            {
+                var state = result.states[i];
+                var row = document.createElement("tr");
+                row.appendChild(createCell(i + 1));
+
+                row.appendChild(createCell(state.W));
+
+                for(var j = 0; j < labels.length; j++)
+                {
+                    row.appendChild(createCell(state[labels[j]]));
+                }
+
+                monotoneFrameworkAnalysisResultsBody.appendChild(row);
+            }
         }
+    }
+
+    function getMonotoneFramework()
+    {
+        switch(selectedAnalysisType)
+        {
+            case analysisType.availableExpressions:
+                return MonotoneFramework.instantiateAvailableExpressionsAnalysis(currentProgram, currentProgramInfo);
+            case analysisType.liveVariables:
+                return MonotoneFramework.instantiateLiveVariablesAnalysis(currentProgram, currentProgramInfo);
+            case analysisType.reachingDefinitions:
+                return MonotoneFramework.instantiateReachingDefinitionsAnalysis(currentProgram, currentProgramInfo);
+            case analysisType.veryBusyExpressions:
+                return MonotoneFramework.instantiateReachingDefinitionsAnalysis(currentProgram, currentProgramInfo);
+            default:
+                return MonotoneFramework.instantiateAvailableExpressionsAnalysis(currentProgram, currentProgramInfo);
+        }
+
     }
 
     try
