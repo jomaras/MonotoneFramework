@@ -75,7 +75,7 @@ var ASTHelper =
 
     getFinalLabels: function(program)
     {
-        var lastStatements = this._getLastStatements(program.body)
+        var lastStatements = this._getLastStatements(program.body[program.body.length - 1])
 
         if(lastStatements == null) { return []; }
 

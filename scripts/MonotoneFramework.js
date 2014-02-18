@@ -151,7 +151,7 @@ MonotoneFramework._getVariablesUnknownLabels = function(program)
 
     for(var identifier in identifiersMap)
     {
-        variablesUnknownLabels.push(new MonotoneFramework.VariableLabel(identifier, null).toString());
+        variablesUnknownLabels.push("(" + identifier + ",?)");
     }
 
     return variablesUnknownLabels;
@@ -165,5 +165,5 @@ MonotoneFramework.VariableLabel = function(variable, label)
 
 MonotoneFramework.VariableLabel.prototype.toString = function()
 {
-    return "(" + this.variable + ", " + (this.label || "?") + ")";
+    return "(" + this.variable + "," + (this.label || "?") + ")";
 }

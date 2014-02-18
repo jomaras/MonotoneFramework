@@ -87,7 +87,7 @@ GenerateDerivator.prototype._liveVariablesGetGeneratedFromConditionalStatement =
     {
         if(identifiersMap.hasOwnProperty(identifier))
         {
-            identifiers.push(identifier.name);
+            identifiers.push(identifier);
         }
     }
 

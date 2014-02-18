@@ -287,8 +287,8 @@ window.onload = function ()
             row.appendChild(createCell(label));
             row.appendChild(createCell("{" + labelMapping[label].killed.join(", ") + "}"));
             row.appendChild(createCell("{" + labelMapping[label].generated.join(", ") + "}"));
-            row.appendChild(createCell("{" + labelMapping[label].inCondition + "}"));
-            row.appendChild(createCell("{" + labelMapping[label].outCondition + "}"));
+            row.appendChild(createCell(labelMapping[label].inCondition.toString().replace("Set:", "")));
+            row.appendChild(createCell(labelMapping[label].outCondition.toString().replace("Set:", "")));
 
             analysisResultsTableBody.appendChild(row);
         }
@@ -380,11 +380,10 @@ window.onload = function ()
             case analysisType.reachingDefinitions:
                 return MonotoneFramework.instantiateReachingDefinitionsAnalysis(currentProgram, currentProgramInfo);
             case analysisType.veryBusyExpressions:
-                return MonotoneFramework.instantiateReachingDefinitionsAnalysis(currentProgram, currentProgramInfo);
+                return MonotoneFramework.instantiateVeryBusyExpressionsAnalysis(currentProgram, currentProgramInfo);
             default:
                 return MonotoneFramework.instantiateAvailableExpressionsAnalysis(currentProgram, currentProgramInfo);
         }
-
     }
 
     try
@@ -395,5 +394,9 @@ window.onload = function ()
             window.editor.getTextView().getModel().addEventListener("Changed", parse);
             parse(100);
         });
-    } catch (e) {}
+    }
+    catch (e)
+    {
+        console.log("Error: " + e);
+    }
 };
